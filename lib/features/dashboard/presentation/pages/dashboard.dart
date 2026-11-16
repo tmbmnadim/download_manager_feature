@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laantech_download_manager/features/auth/presentation/widgets/logout_button.dart';
 import 'package:laantech_download_manager/features/dashboard/presentation/widgets/transfer_card.dart';
 
 class TransfersDashboardScreen extends StatelessWidget {
@@ -8,7 +9,10 @@ class TransfersDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text("Dashboard")),
+      appBar: AppBar(
+        title: const Text("Dashboard"),
+        actions: const [LogoutButton()],
+      ),
       body: SafeArea(
         top: false,
         child: Padding(

@@ -23,6 +23,17 @@ Dashboard show all ongoing transfers and also show recent transfers.
 #### 3. Upload
 Upload will let users select and upload files.
 
+Theres is the core folder holding core things for the project. This contains constants, di(Dependency Injection), error, navigation, network, routes. These are some essential components for this project.
+
+* Constants hold constant information for the app, for example: Base Url of the api.
+* di holds the injection files.
+* error contains mapping for errors
+* navigation has the bottom nav shell for navigation withing Files, Dashboard and Upload Screen
+* network holds dio client, logging interceptor(for debugging), and network info for checking connections
+* routes lists all the routes of the app and initializes go router for navigation
+* theme is for app theme and some styles
+* widget holds shared widgets
+
 ### State Management
 BLoC has been used for managing state as it's scallable and is more strict towards seprating layers and helping keep code sorted. 
 

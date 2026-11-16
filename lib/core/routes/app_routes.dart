@@ -7,6 +7,9 @@ import 'package:laantech_download_manager/features/upload/presentation/pages/upl
 
 class AppRoutes {
   static String get login => "/login";
+  static String get files => "/files";
+  static String get dashboard => "/dashboard";
+  static String get upload => "/upload";
 
   static final List<RouteBase> _routes = [
     GoRoute(path: login, builder: (context, state) => const LoginScreen()),
@@ -17,7 +20,7 @@ class AppRoutes {
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: "/files",
+              path: files,
               builder: (context, state) => const FilesScreen(),
             ),
           ],
@@ -25,7 +28,7 @@ class AppRoutes {
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: "/dashboard",
+              path: dashboard,
               builder: (context, state) => const TransfersDashboardScreen(),
             ),
           ],
@@ -33,7 +36,7 @@ class AppRoutes {
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: "/upload",
+              path: upload,
               builder: (context, state) => const UploadScreen(),
             ),
           ],
@@ -43,7 +46,7 @@ class AppRoutes {
   ];
 
   static final GoRouter router = GoRouter(
-    initialLocation: "/dashboard",
+    initialLocation: login,
     routes: _routes,
   );
 }
