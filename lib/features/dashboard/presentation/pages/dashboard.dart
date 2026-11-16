@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:laantech_download_manager/features/auth/presentation/widgets/logout_button.dart';
 import 'package:laantech_download_manager/features/dashboard/presentation/widgets/transfer_card.dart';
+import 'package:laantech_download_manager/features/files/domain/entities/file_entity.dart';
+
+// Placeholder until the transfer state is wired in.
+final _sampleFile = FileEntity(
+  id: 1,
+  name: 'sample_86c01db4.pdf',
+  originalName: 'Something.extension',
+  size: 1605632000,
+  type: 'application/pdf',
+  uploadedAt: DateTime(2026, 11, 16, 10, 30),
+  url: '',
+);
 
 class TransfersDashboardScreen extends StatelessWidget {
   const TransfersDashboardScreen({super.key});
@@ -27,7 +39,7 @@ class TransfersDashboardScreen extends StatelessWidget {
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return TransferCard(
-                      title: "Something.extension",
+                      file: _sampleFile,
                       onSuffix: () {},
                       progressValue: 0.4,
                     );
@@ -41,10 +53,7 @@ class TransfersDashboardScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: 2,
                   itemBuilder: (context, index) {
-                    return TransferCard(
-                      title: "Something.extension",
-                      subtitle: "storage/downloads",
-                    );
+                    return TransferCard(file: _sampleFile);
                   },
                 ),
               ),

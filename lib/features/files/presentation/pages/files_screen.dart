@@ -52,8 +52,8 @@ class FilesScreen extends StatelessWidget {
                                 itemCount: state.files.length,
                                 itemBuilder: (context, index) {
                                   return TransferCard(
-                                    title: state.files[index].name,
-                                    subtitle: "Size: ${state.files[index].size}",
+                                    file: state.files[index],
+                                    progressValue: 0.5,
                                     onSuffix: () {},
                                   );
                                 },
