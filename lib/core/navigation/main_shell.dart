@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:laantech_download_manager/core/di/dependency_injection.dart';
+import 'package:laantech_download_manager/features/files/presentation/bloc/files_cubit.dart';
 
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.navigationShell});
@@ -8,22 +11,33 @@ class MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (i) => navigationShell.goBranch(
-          i,
-          initialLocation: i == navigationShell.currentIndex,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<FilesCubit>()..getFiles(),
+          lazy: true,
         ),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.folder), label: 'Files'),
-          NavigationDestination(
-            icon: Icon(Icons.swap_vert),
-            label: 'Dashboard',
+      ],
+      child: Scaffold(
+        body: navigationShell,
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: navigationShell.currentIndex,
+          onDestinationSelected: (i) => navigationShell.goBranch(
+            i,
+            initialLocation: i == navigationShell.currentIndex,
           ),
-          NavigationDestination(icon: Icon(Icons.upload_file), label: 'Upload'),
-        ],
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.folder), label: 'Files'),
+            NavigationDestination(
+              icon: Icon(Icons.swap_vert),
+              label: 'Dashboard',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.upload_file),
+              label: 'Upload',
+            ),
+          ],
+        ),
       ),
     );
   }

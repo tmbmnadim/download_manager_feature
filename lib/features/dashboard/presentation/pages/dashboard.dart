@@ -27,7 +27,7 @@ class TransfersDashboardScreen extends StatelessWidget {
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return TransferCard(
-                      filename: "Something.extension",
+                      title: "Something.extension",
                       onSuffix: () {},
                       progressValue: 0.4,
                     );
@@ -42,8 +42,8 @@ class TransfersDashboardScreen extends StatelessWidget {
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return TransferCard(
-                      filename: "Something.extension",
-                      path: "storage/downloads",
+                      title: "Something.extension",
+                      subtitle: "storage/downloads",
                     );
                   },
                 ),

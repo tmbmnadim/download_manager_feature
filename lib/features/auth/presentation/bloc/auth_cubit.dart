@@ -14,29 +14,24 @@ class AuthCubit extends Cubit<AuthState> {
     : super(const AuthInitial());
 
   Future<void> login(String username, String password) async {
-    try {
-      emit(AuthLoading());
-      final result = await _login.call(username, password);
+    emit(AuthLoading());
+    final result = await _login.call(username, password);
 
-      result.fold(
-        (failure) {
-          emit(AuthError(failure.message));
-        },
-        (user) {
-          emit(Authenticated(user));
-        },
-      );
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    result.fold(
+      (failure) {
+        emit(AuthError(failure.message));
+      },
+      (user) {
+        emit(Authenticated(user));
+      },
+    );
   }
 
   Future<void> restoreSession() async {
     emit(const AuthLoading());
     final result = await _restoreSession();
     result.fold(
-      (failure) =>
-          emit(const Unauthenticated()), // unreadable session = logged out
+      (failure) => emit(const Unauthenticated()),
       (user) =>
           emit(user == null ? const Unauthenticated() : Authenticated(user)),
     );

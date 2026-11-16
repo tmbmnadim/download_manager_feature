@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TransferCard extends StatelessWidget {
-  final String filename;
-  final String? path;
+  final String title;
+  final String? subtitle;
   final VoidCallback? onSuffix;
   final double? progressValue;
   const TransferCard({
     super.key,
-    required this.filename,
-    this.path,
+    required this.title,
+    this.subtitle,
     this.onSuffix,
     this.progressValue,
   });
@@ -20,9 +20,9 @@ class TransferCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(filename),
-        subtitle: path != null
-            ? Text(path!)
+        title: Text(title),
+        subtitle: subtitle != null
+            ? Text(subtitle!)
             : progressValue == null
             ? null
             : LinearProgressIndicator(value: progressValue),

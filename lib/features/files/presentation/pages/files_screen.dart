@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laantech_download_manager/core/widgets/dm_snackbar.dart';
 import 'package:laantech_download_manager/features/auth/presentation/widgets/logout_button.dart';
 import 'package:laantech_download_manager/features/dashboard/presentation/widgets/transfer_card.dart';
+import 'package:laantech_download_manager/features/files/presentation/bloc/files_cubit.dart';
+import 'package:laantech_download_manager/features/files/presentation/bloc/files_state.dart';
 
 class FilesScreen extends StatelessWidget {
   const FilesScreen({super.key});
@@ -13,31 +17,54 @@ class FilesScreen extends StatelessWidget {
         title: const Text('Files'),
         actions: const [LogoutButton()],
       ),
-      body: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Files", style: theme.textTheme.titleLarge),
-              SizedBox(height: 8),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {},
-                  child: ListView.builder(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      return TransferCard(
-                        filename: "Something.extension",
-                        onSuffix: () {},
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
+      body: BlocListener<FilesCubit, FilesState>(
+        listener: (context, state) {
+          if (state is FilesError) {
+            DMSnackbar.show(context, state.message);
+          }
+        },
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BlocBuilder<FilesCubit, FilesState>(
+              builder: (context, state) {
+                switch (state) {
+                  case FilesInitial():
+                  case FilesLoading():
+                    return Center(child: CircularProgressIndicator());
+                  case FilesError():
+                    return Center(child: Text("No Files to Show"));
+                  case FilesFetched():
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Files", style: theme.textTheme.titleLarge),
+                        SizedBox(height: 8),
+                        if (state.files.isEmpty)
+                          Center(child: Text("No Files to Show"))
+                        else
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: context.read<FilesCubit>().getFiles,
+                              child: ListView.builder(
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemCount: state.files.length,
+                                itemBuilder: (context, index) {
+                                  return TransferCard(
+                                    title: state.files[index].name,
+                                    subtitle: "Size: ${state.files[index].size}",
+                                    onSuffix: () {},
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                }
+              },
+            ),
           ),
         ),
       ),

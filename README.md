@@ -40,6 +40,7 @@ BLoC has been used for managing state as it's scallable and is more strict towar
 ### Networking
 
 ### Persistence
+Used Flutter Secure Storage to persist user data and token so that session can stay even if the app is closed.
 
 ## Background Execution Strategy
 
@@ -52,6 +53,7 @@ BLoC has been used for managing state as it's scallable and is more strict towar
 ## Notifications
 
 ## Error Handling and Resilience
+The errors were mostly handled in the repository. Catched errors are common errors like FormatException, TypeError.
 
 ## Assumptions
 
