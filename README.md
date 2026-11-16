@@ -36,15 +36,16 @@ Theres is the core folder holding core things for the project. This contains con
 
 ### State Management
 BLoC has been used for managing state as it's scallable and is more strict towards seprating layers and helping keep code sorted. 
+For Authentication and Loading Files, Cubits were used since this is simpler. But for transfers BLoC was selected to use its stream features.
 
 ### Networking
 
 ### Persistence
-Used Flutter Secure Storage to persist user data and token so that session can stay even if the app is closed.
+Used Flutter Secure Storage to persist user data and token so that session can stay even if the app is closed. 
+And background_downloader package handles the persistance of files for ongoing downloads.
 
 ## Background Execution Strategy
-
-### Approach
+background_downloader handles the downlods in the background.
 
 ### Android Platform Limits
 

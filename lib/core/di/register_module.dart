@@ -1,3 +1,4 @@
+import 'package:background_downloader/background_downloader.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -16,4 +17,7 @@ abstract class RegisterModule {
 
   @lazySingleton
   FlutterSecureStorage get secureStorage => FlutterSecureStorage();
+
+  @singleton
+  FileDownloader get fileDownloader => FileDownloader();
 }

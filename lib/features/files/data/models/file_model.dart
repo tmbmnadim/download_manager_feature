@@ -11,6 +11,16 @@ class FileModel extends FileEntity {
     required super.url,
   });
 
+  factory FileModel.fromEntity(FileEntity e) => FileModel(
+    id: e.id,
+    name: e.name,
+    originalName: e.originalName,
+    size: e.size,
+    type: e.type,
+    uploadedAt: e.uploadedAt,
+    url: e.url,
+  );
+
   /// Parses one file object, as returned by `GET /get` (inside `files`)
   /// and by `POST /upload` (inside `file`).
   factory FileModel.fromJson(Map<String, dynamic> json) {

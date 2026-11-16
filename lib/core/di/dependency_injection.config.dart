@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:background_downloader/background_downloader.dart' as _i677;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
@@ -34,6 +35,24 @@ import 'package:laantech_download_manager/features/auth/domain/usecases/restore_
     as _i761;
 import 'package:laantech_download_manager/features/auth/presentation/bloc/auth_cubit.dart'
     as _i9;
+import 'package:laantech_download_manager/features/dashboard/data/datasources/transfers_network_source.dart'
+    as _i737;
+import 'package:laantech_download_manager/features/dashboard/data/repositories/transfer_repository_impl.dart'
+    as _i222;
+import 'package:laantech_download_manager/features/dashboard/domain/repositories/transfer_repository.dart'
+    as _i37;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/cancel_transfer_usecase.dart'
+    as _i231;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/pause_transfer_usecase.dart'
+    as _i749;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/resume_transfer_usecase.dart'
+    as _i175;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/retry_transfer_usecase.dart'
+    as _i643;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/start_download_usecase.dart'
+    as _i468;
+import 'package:laantech_download_manager/features/dashboard/domain/usecases/watch_transfers_usecase.dart'
+    as _i301;
 import 'package:laantech_download_manager/features/files/data/datasources/file_remote_source.dart'
     as _i450;
 import 'package:laantech_download_manager/features/files/data/repositories/file_repository_impl.dart'
@@ -53,6 +72,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
+    gh.singleton<_i677.FileDownloader>(() => registerModule.fileDownloader);
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => registerModule.secureStorage,
@@ -72,6 +92,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i450.FileRemoteSource>(
       () => _i450.FileRemoteSource(apiService: gh<_i1003.ApiService>()),
     );
+    gh.factory<_i737.TransfersNetworkSource>(
+      () => _i737.TransfersNetworkSource(
+        gh<_i677.FileDownloader>(),
+        gh<_i1003.ApiService>(),
+      ),
+    );
     gh.factory<_i23.FileRepository>(
       () => _i46.FileRepositoryImpl(gh<_i450.FileRemoteSource>()),
     );
@@ -84,6 +110,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i642.GetFilesUseCase>(
       () => _i642.GetFilesUseCase(gh<_i23.FileRepository>()),
     );
+    gh.lazySingleton<_i37.TransferRepository>(
+      () => _i222.TransferRepositoryImpl(gh<_i737.TransfersNetworkSource>()),
+    );
     gh.factory<_i1055.FilesCubit>(
       () => _i1055.FilesCubit(gh<_i642.GetFilesUseCase>()),
     );
@@ -95,6 +124,24 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i761.RestoreSessionUseCase>(
       () => _i761.RestoreSessionUseCase(gh<_i634.AuthRepository>()),
+    );
+    gh.factory<_i231.CancelTransferUseCase>(
+      () => _i231.CancelTransferUseCase(gh<_i37.TransferRepository>()),
+    );
+    gh.factory<_i749.PauseTransferUseCase>(
+      () => _i749.PauseTransferUseCase(gh<_i37.TransferRepository>()),
+    );
+    gh.factory<_i175.ResumeTransferUseCase>(
+      () => _i175.ResumeTransferUseCase(gh<_i37.TransferRepository>()),
+    );
+    gh.factory<_i643.RetryTransferUseCase>(
+      () => _i643.RetryTransferUseCase(gh<_i37.TransferRepository>()),
+    );
+    gh.factory<_i468.StartDownloadUseCase>(
+      () => _i468.StartDownloadUseCase(gh<_i37.TransferRepository>()),
+    );
+    gh.factory<_i301.WatchTransfersUseCase>(
+      () => _i301.WatchTransfersUseCase(gh<_i37.TransferRepository>()),
     );
     gh.factory<_i9.AuthCubit>(
       () => _i9.AuthCubit(

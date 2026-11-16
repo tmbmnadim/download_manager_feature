@@ -34,7 +34,7 @@ class TransferCard extends StatelessWidget {
                 children: [
                   Expanded(child: LinearProgressIndicator(value: progress)),
                   SizedBox(width: 8),
-                  Text("${(progress*100).toInt()}%")
+                  Text("${(progress * 100).toInt()}%"),
                 ],
               ),
         trailing: onSuffix == null

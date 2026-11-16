@@ -24,6 +24,8 @@ class ApiService {
   }
 
   String? _token;
+  Map<String, String> get authHeaders =>
+      _token == null ? {} : {'Authorization': 'Bearer $_token'};
 
   void setAuthToken(String? token) {
     _token = token;
