@@ -15,14 +15,15 @@ import 'package:laantech_download_manager/features/files/domain/entities/file_en
 @LazySingleton(as: TransferRepository)
 class TransferRepositoryImpl implements TransferRepository {
   final TransfersNetworkSource _source;
-  final Map<String, TransferModel> _transfers = {};
-  final StreamController<List<TransferEntity>> _controller =
-      StreamController.broadcast();
 
   TransferRepositoryImpl(this._source) {
     _source.getTaskUpdateStream().listen(_onUpdate);
     _source.resumeFromBackground();
   }
+
+  final Map<String, TransferModel> _transfers = {};
+  final StreamController<List<TransferEntity>> _controller =
+      StreamController.broadcast();
 
   List<TransferEntity> _snapshot() => List.unmodifiable(_transfers.values);
 
@@ -32,7 +33,6 @@ class TransferRepositoryImpl implements TransferRepository {
     final id = update.task.taskId;
     var current = _transfers[id];
     if (current == null) {
-      // A transfer from before the app restarted: rebuild it from the task.
       try {
         current = TransferModel.fromTask(update.task);
       } catch (_) {

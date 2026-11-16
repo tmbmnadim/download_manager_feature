@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:laantech_download_manager/core/utils/formatters.dart';
-import 'package:laantech_download_manager/features/files/domain/entities/file_entity.dart';
+import 'package:laantech_download_manager/features/dashboard/domain/entities/transfer_entity.dart';
 
 class TransferCard extends StatelessWidget {
-  final FileEntity file;
+  final TransferEntity transfer;
   final VoidCallback? onSuffix;
 
-  /// 0.0 to 1.0. Null when the file is not being transferred.
-  final double? progressValue;
-
-  const TransferCard({
-    super.key,
-    required this.file,
-    this.onSuffix,
-    this.progressValue,
-  });
+  const TransferCard({super.key, required this.transfer, this.onSuffix});
 
   @override
   Widget build(BuildContext context) {
-    final progress = progressValue;
-    final completed = progress == null ? null : (file.size * progress).round();
+    final file = transfer.file;
+    final progress = transfer.progress;
+    final status = transfer.status;
+    Icon icon = const Icon(Icons.download);
+    switch (status) {
+      case TransferStatus.queued:
+        icon = const Icon(Icons.queue);
+      case TransferStatus.running:
+        icon = const Icon(Icons.downloading);
+      case TransferStatus.paused:
+        icon = const Icon(Icons.pause_circle);
+      case TransferStatus.completed:
+        icon = const Icon(Icons.check_circle);
+      case TransferStatus.canceled:
+        icon = const Icon(Icons.cancel);
+      case TransferStatus.failed:
+        icon = Icon(Icons.error, color: Theme.of(context).colorScheme.error);
+    }
 
     return Card(
       shadowColor: Colors.transparent,
@@ -28,8 +36,13 @@ class TransferCard extends StatelessWidget {
         shape: const Border(),
         collapsedShape: const Border(),
         title: Text(file.originalName),
-        subtitle: progress == null
-            ? Text(Formatters.bytes(file.size))
+        subtitle: status == TransferStatus.failed
+            ? Text(
+                transfer.errorMessage ?? 'Transfer failed.',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              )
             : Row(
                 children: [
                   Expanded(child: LinearProgressIndicator(value: progress)),
@@ -39,14 +52,16 @@ class TransferCard extends StatelessWidget {
               ),
         trailing: onSuffix == null
             ? null
-            : IconButton(onPressed: onSuffix, icon: const Icon(Icons.download)),
+            : IconButton(onPressed: onSuffix, icon: icon),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (status == TransferStatus.failed)
+            _Row('Error', transfer.errorMessage ?? 'Transfer failed.'),
           _Row('Size', Formatters.bytes(file.size)),
-          if (completed != null) ...[
-            _Row('Completed', Formatters.bytes(completed)),
-            _Row('Remaining', Formatters.bytes(file.size - completed)),
+          if (status == TransferStatus.completed) ...[
+            _Row('Completed', Formatters.bytes(transfer.completedBytes)),
+            _Row('Remaining', Formatters.bytes(transfer.remainingBytes)),
           ],
           _Row('Type', file.type),
           _Row('Uploaded', Formatters.date(file.uploadedAt)),

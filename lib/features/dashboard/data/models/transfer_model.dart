@@ -15,11 +15,8 @@ class TransferModel extends TransferEntity {
     super.timeRemaining,
     super.errorMessage,
   });
-
-  /// Builds a new (queued) transfer from a background task.
-  ///
-  /// The file is read from `task.metaData`, so create the task with
-  /// `metaData: jsonEncode(file.toJson())`.
+  
+  
   factory TransferModel.fromTask(Task task) {
     return TransferModel(
       id: task.taskId,

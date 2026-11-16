@@ -53,6 +53,8 @@ import 'package:laantech_download_manager/features/dashboard/domain/usecases/sta
     as _i468;
 import 'package:laantech_download_manager/features/dashboard/domain/usecases/watch_transfers_usecase.dart'
     as _i301;
+import 'package:laantech_download_manager/features/dashboard/presentation/bloc/transfers_bloc.dart'
+    as _i342;
 import 'package:laantech_download_manager/features/files/data/datasources/file_remote_source.dart'
     as _i450;
 import 'package:laantech_download_manager/features/files/data/repositories/file_repository_impl.dart'
@@ -148,6 +150,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i385.LoginUseCase>(),
         gh<_i761.RestoreSessionUseCase>(),
         gh<_i276.LogoutUseCase>(),
+      ),
+    );
+    gh.factory<_i342.TransfersBloc>(
+      () => _i342.TransfersBloc(
+        watchTransfersUseCase: gh<_i301.WatchTransfersUseCase>(),
+        startDownloadUseCase: gh<_i468.StartDownloadUseCase>(),
+        resumeDownloadUseCase: gh<_i175.ResumeTransferUseCase>(),
+        pauseDownloadUseCase: gh<_i749.PauseTransferUseCase>(),
+        cancelDownloadUseCase: gh<_i231.CancelTransferUseCase>(),
+        retryDownloadUseCase: gh<_i643.RetryTransferUseCase>(),
       ),
     );
     return this;

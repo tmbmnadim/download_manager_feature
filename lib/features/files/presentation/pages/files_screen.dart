@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laantech_download_manager/core/widgets/dm_snackbar.dart';
 import 'package:laantech_download_manager/features/auth/presentation/widgets/logout_button.dart';
-import 'package:laantech_download_manager/features/dashboard/presentation/widgets/transfer_card.dart';
+import 'package:laantech_download_manager/features/dashboard/presentation/bloc/transfers_bloc.dart';
+import 'package:laantech_download_manager/features/dashboard/presentation/bloc/transfers_event.dart';
 import 'package:laantech_download_manager/features/files/presentation/bloc/files_cubit.dart';
 import 'package:laantech_download_manager/features/files/presentation/bloc/files_state.dart';
+import 'package:laantech_download_manager/features/files/presentation/widgets/file_card.dart';
 
 class FilesScreen extends StatelessWidget {
   const FilesScreen({super.key});
@@ -51,10 +53,13 @@ class FilesScreen extends StatelessWidget {
                                 physics: AlwaysScrollableScrollPhysics(),
                                 itemCount: state.files.length,
                                 itemBuilder: (context, index) {
-                                  return TransferCard(
+                                  return FileCard(
                                     file: state.files[index],
-                                    progressValue: 0.5,
-                                    onSuffix: () {},
+                                    onDownload: () {
+                                      context.read<TransfersBloc>().add(
+                                        StartTransferEvent(state.files[index]),
+                                      );
+                                    },
                                   );
                                 },
                               ),
